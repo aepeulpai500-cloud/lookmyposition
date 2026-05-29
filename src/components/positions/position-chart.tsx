@@ -5,7 +5,7 @@ import { TradingViewWidget } from "@/components/tradingview/tradingview-widget";
 import type { Position } from "@/lib/types";
 
 export function PositionChart({
-  position,
+  position: _position,
   symbol,
   height = 460,
 }: {
@@ -14,7 +14,7 @@ export function PositionChart({
   height?: number;
 }) {
   const containerId = useId().replace(/:/g, "");
-  const widgetRef = useRef<any | null>(null);
+  const widgetRef = useRef<unknown | null>(null);
 
   return (
     <div className="relative" data-testid="position-chart-container">

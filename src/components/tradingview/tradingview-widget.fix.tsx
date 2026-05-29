@@ -22,7 +22,7 @@ function loadTradingViewScript() {
   const existing = document.getElementById(id) as HTMLScriptElement | null;
 
   if (existing) {
-    if ((existing as any).dataset?.loaded === "true") {
+    if ((existing as HTMLScriptElement & { dataset?: { loaded?: string } }).dataset?.loaded === "true") {
       return Promise.resolve();
     }
     return tradingViewScriptPromise ?? new Promise((resolve, reject) => {

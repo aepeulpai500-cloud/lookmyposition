@@ -80,7 +80,7 @@ export function TradingViewWidget({
   className?: string;
   disableInteractions?: boolean;
   containerId?: string;
-  onReady?: (inst: any, containerId: string) => void;
+  onReady?: (inst: unknown, containerId: string) => void;
 }) {
   const generatedId = useId().replace(/:/g, "");
   const containerId = containerIdProp ?? generatedId;
@@ -98,7 +98,7 @@ export function TradingViewWidget({
         if (cancelled) return;
         el.innerHTML = "";
         // instantiate widget and expose instance for sync
-        const inst = new (widget as any)({
+        const inst = new (widget as new (options: Record<string, unknown>) => unknown)({
           autosize: true,
           symbol: tvSymbol,
           interval: "15",
@@ -113,15 +113,15 @@ export function TradingViewWidget({
         });
 
         try {
-          (window as any).__TV_WIDGETS__ = (window as any).__TV_WIDGETS__ || {};
-          (window as any).__TV_WIDGETS__[containerId] = inst;
-        } catch (e) {
+          (window as Window & { __TV_WIDGETS__?: Record<string, unknown> }).__TV_WIDGETS__ = (window as Window & { __TV_WIDGETS__?: Record<string, unknown> }).__TV_WIDGETS__ || {};
+          (window as Window & { __TV_WIDGETS__?: Record<string, unknown> }).__TV_WIDGETS__[containerId] = inst;
+        } catch {
           // ignore
         }
 
         try {
           onReady?.(inst, containerId);
-        } catch (e) {
+        } catch {
           // ignore
         }
       })
@@ -132,7 +132,7 @@ export function TradingViewWidget({
     return () => {
       cancelled = true;
     };
-  }, [containerId, tvSymbol]);
+  }, [containerId, tvSymbol, onReady]);
 
   return (
     <div
