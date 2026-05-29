@@ -5,11 +5,9 @@ import { TradingViewWidget } from "@/components/tradingview/tradingview-widget";
 import type { Position } from "@/lib/types";
 
 export function PositionChart({
-  position: _position,
   symbol,
   height = 460,
 }: {
-  position: Position | null;
   symbol: string;
   height?: number;
 }) {

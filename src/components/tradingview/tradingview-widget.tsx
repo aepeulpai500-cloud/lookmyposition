@@ -22,7 +22,7 @@ function loadTradingViewScript() {
   const existing = document.getElementById(id) as HTMLScriptElement | null;
 
   if (existing) {
-    if ((existing as any).dataset?.loaded === "true") {
+    if ((existing as HTMLScriptElement & { dataset?: { loaded?: string } }).dataset?.loaded === "true") {
       return Promise.resolve();
     }
     return tradingViewScriptPromise ?? new Promise((resolve, reject) => {
@@ -113,8 +113,10 @@ export function TradingViewWidget({
         });
 
         try {
-          (window as Window & { __TV_WIDGETS__?: Record<string, unknown> }).__TV_WIDGETS__ = (window as Window & { __TV_WIDGETS__?: Record<string, unknown> }).__TV_WIDGETS__ || {};
-          (window as Window & { __TV_WIDGETS__?: Record<string, unknown> }).__TV_WIDGETS__[containerId] = inst;
+          const tvWidgets = (window as Window & { __TV_WIDGETS__?: Record<string, unknown> }).__TV_WIDGETS__;
+          if (tvWidgets) {
+            tvWidgets[containerId] = inst;
+          }
         } catch {
           // ignore
         }
