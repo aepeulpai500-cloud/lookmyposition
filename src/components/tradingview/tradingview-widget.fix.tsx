@@ -4,19 +4,11 @@ import { useEffect, useId, useMemo, useRef } from "react";
 import { toTradingViewSymbol } from "@/lib/tradingview";
 import { cn } from "@/lib/utils";
 
-declare global {
-  interface Window {
-    TradingView?: {
-      widget: (options: Record<string, unknown>) => unknown;
-    };
-  }
-}
-
 let tradingViewScriptPromise: Promise<void> | null = null;
 
 function loadTradingViewScript() {
   if (typeof document === "undefined") return Promise.resolve();
-  if (window.TradingView?.widget) return Promise.resolve();
+  if ((window as Window & { TradingView?: { widget: (options: Record<string, unknown>) => unknown } }).TradingView?.widget) return Promise.resolve();
 
   const id = "tradingview-widget-script";
   const existing = document.getElementById(id) as HTMLScriptElement | null;
@@ -52,7 +44,7 @@ function waitForTradingViewWidget(timeout = 8000) {
   return new Promise<(options: Record<string, unknown>) => unknown>((resolve, reject) => {
     const start = Date.now();
     const tick = () => {
-      const widget = window.TradingView?.widget;
+      const widget = (window as Window & { TradingView?: { widget: (options: Record<string, unknown>) => unknown } }).TradingView?.widget;
       if (typeof widget === "function") {
         resolve(widget);
         return;
