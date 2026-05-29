@@ -52,7 +52,7 @@ export default function DashboardPage() {
           <div className="text-xs text-muted-foreground">{selected ? selected.symbol : "BTCUSDT"}</div>
         </div>
         {selected ? (
-          <PositionChart key={chartKey} position={selected} symbol={chartSymbol} height={460} />
+          <PositionChart key={chartKey} symbol={chartSymbol} height={460} />
         ) : (
           <Skeleton className="h-[460px] rounded-2xl" />
         )}

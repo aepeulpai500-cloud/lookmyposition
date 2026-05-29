@@ -2,7 +2,6 @@
 
 import { useId, useRef } from "react";
 import { TradingViewWidget } from "@/components/tradingview/tradingview-widget";
-import type { Position } from "@/lib/types";
 
 export function PositionChart({
   symbol,
